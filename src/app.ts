@@ -10,7 +10,7 @@ app.use('/api/health', healthRouter);
 app.use('/api/tasks', tasksRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ message: 'Маршрут не найден' });
 });
 
 app.use(errorHandler);

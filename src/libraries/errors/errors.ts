@@ -1,6 +1,10 @@
 import type { ZodError } from 'zod';
 import { hasOwn } from '#src/libraries/utils/object.js';
 
+export interface BaseErrorOptions extends ErrorOptions {
+  details?: unknown;
+}
+
 export interface ApiErrorOptions extends ErrorOptions {
   status: number;
   details?: unknown; /* Отправляется клиенту */
@@ -8,16 +12,24 @@ export interface ApiErrorOptions extends ErrorOptions {
 
 type ClientErrorOptions = Omit<ApiErrorOptions, 'status'>;
 
-export class ApiError extends Error {
-  status: number;
+export class BaseError extends Error {
   declare details?: unknown;
+
+  constructor(message: string, options: BaseErrorOptions) {
+    super(message, options);
+    this.name = 'BaseError';
+
+    if(hasOwn<string>(options, 'details')) this.details = options.details;
+  }
+}
+
+export class ApiError extends BaseError {
+  status: number;
 
   constructor(message: string, options: ApiErrorOptions) {
     super(message, options);
     this.name = 'ApiError';
     this.status = options.status;
-
-    if(hasOwn<string>(options, 'details')) this.details = options.details;
   }
 }
 
@@ -36,6 +48,13 @@ export class NotFoundError extends ApiError {
     
     super(message, apiErrorOptions);
     this.name = 'NotFoundError';
+  }
+}
+
+export class TaskNotFoundError extends BaseError {
+  constructor(message: string, options?: BaseErrorOptions) {
+    super(message, options || {});
+    this.name = 'TaskNotFoundError';
   }
 }
 

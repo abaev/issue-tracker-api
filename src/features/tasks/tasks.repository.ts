@@ -17,10 +17,10 @@ const tasks: Task[] = [
 
 let nextId = 3;
 
-export function create(createTaskInput: CreateTaskInput): Task {
+export function create(options: CreateTaskInput): Task {
   const task: Task = {
     id: nextId++,
-    ...createTaskInput,
+    ...options,
     status: 'open'
   };
 
@@ -29,30 +29,30 @@ export function create(createTaskInput: CreateTaskInput): Task {
   return structuredClone(task);
 }
 
-export function find({ id, status, search }: FindTaskInput = {}): Task[] {
+export function find(options: FindTaskInput = {}): Task[] {
   return tasks.filter(task => {
     let conditionsResults: boolean[] = [];
 
-    if(id !== undefined) conditionsResults.push(task.id === id);
+    if(options.id !== undefined) conditionsResults.push(task.id === options.id);
 
-    if(status !== undefined) conditionsResults.push(task.status === status);
+    if(options.status !== undefined) conditionsResults.push(task.status === options.status);
 
-    if(search) {
-      conditionsResults.push(task.title.toLowerCase().includes(search.toLowerCase()));
+    if(options.search) {
+      conditionsResults.push(task.title.toLowerCase().includes(options.search.toLowerCase()));
     }
 
     return conditionsResults.every(c => c);
   });
 }
 
-export function update({ id, updateTaskInput }: { id: number, updateTaskInput: UpdateTaskInput }): Task | undefined {
-  const index = tasks.findIndex(t => t.id === id);
+export function update(options: { id: number, updateTaskInput: UpdateTaskInput }): Task | undefined {
+  const index = tasks.findIndex(t => t.id === options.id);
 
   if(!tasks[index]) return undefined;
 
   tasks[index] = {
     ...tasks[index],
-    ...updateTaskInput
+    ...options.updateTaskInput
   };
 
   return tasks[index];
