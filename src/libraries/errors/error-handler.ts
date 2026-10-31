@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
-import { ApiError } from '#src/libraries/errors/errors.js';
-import { hasOwn } from '#src/libraries/utils/object.js';
+import { ApiError } from './errors.js';
+import { hasOwn } from '../utils/object.js';
 
 export function errorHandler(err: unknown, req: Request, res: Response, next: NextFunction) {
   if(res.headersSent) {

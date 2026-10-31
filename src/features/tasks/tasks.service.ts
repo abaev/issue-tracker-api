@@ -1,6 +1,6 @@
-import type { Task, CreateTaskInput, UpdateTaskInput, FindTaskInput } from '#src/features/tasks/tasks.js';
-import { find, create, update, remove } from '#src/features/tasks/tasks.repository.js';
-import { TaskNotFoundError } from '#src/libraries/errors/errors.js';
+import type { Task, CreateTaskInput, UpdateTaskInput, FindTaskInput } from './tasks.js';
+import { find, create, update, remove } from './tasks.repository.js';
+import { TaskNotFoundError } from '../../libraries/errors/errors.js';
 
 export function findTasks(options: FindTaskInput = {}): Task[] {
   return find(options);

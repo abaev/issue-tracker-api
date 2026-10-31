@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { TaskStatus, CreateTaskInput, UpdateTaskInput, FindTaskInput } from '#src/features/tasks/tasks.js';
+import type { TaskStatus, CreateTaskInput, UpdateTaskInput, FindTaskInput } from './tasks.js';
 
 const taskTitleSchema = z.string().min(1, 'Заголовок обязателен');
 const taskDescriptionSchema = z.string('Должно быть строкой');

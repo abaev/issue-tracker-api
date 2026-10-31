@@ -1,5 +1,5 @@
 import type { ZodError } from 'zod';
-import { hasOwn } from '#src/libraries/utils/object.js';
+import { hasOwn } from '../utils/object.js';
 
 export interface BaseErrorOptions extends ErrorOptions {
   details?: unknown;

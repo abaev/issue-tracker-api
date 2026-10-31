@@ -1,8 +1,8 @@
 import { Router, type Request } from 'express';
-import { findTaskInput, createTaskInputSchema, updateTaskInputSchema } from '#src/features/tasks/tasks.schemas.js';
-import { BadRequestError, NotFoundError, TaskNotFoundError, fieldErrors } from '#src/libraries/errors/errors.js';
-import type { Task } from '#src/features/tasks/tasks.js';
-import { findTasks, createTask, updateTask, removeTask } from '#src/features/tasks/tasks.service.js';
+import { findTaskInput, createTaskInputSchema, updateTaskInputSchema } from './tasks.schemas.js';
+import { BadRequestError, NotFoundError, TaskNotFoundError, fieldErrors } from '../../libraries/errors/errors.js';
+import type { Task } from './tasks.js';
+import { findTasks, createTask, updateTask, removeTask } from './tasks.service.js';
 
 export const tasksRouter = Router();
 
@@ -21,13 +21,24 @@ tasksRouter.get('/{:id}', (req, res) => {
     }
   
   } else {
-    const parsed = findTaskInput.safeParse(req.query);
+    // Получение задач по status и seacrh
+    let toParse: { [key: string]: unknown } | undefined;
 
-    if(parsed.error) {
-      throw new BadRequestError('Неверные параметры запроса', { details: fieldErrors(parsed.error) });
-    }
+    ['status', 'search'].forEach(n => {
+      if(req.query[n] !== undefined) toParse = { ...toParse, [n]: req.query[n] };
+    });
 
-    tasks = findTasks(parsed.data);
+    if(toParse) {
+      const parsed = findTaskInput.safeParse(toParse);
+
+      if(parsed.error) {
+        throw new BadRequestError('Неверные параметры запроса', { details: fieldErrors(parsed.error) });
+      }
+
+      tasks = findTasks(parsed.data);
+      
+      // Получение всех задач
+    } else tasks = findTasks();
   }
 
   res.status(200).json({ tasks });
@@ -84,7 +95,7 @@ tasksRouter.delete('/:id', (req, res) => {
 function parseTaskId(req: Request): number {
   const id = Number(req.params.id);
 
-  if(Number.isNaN(id)) {
+  if(Number.isNaN(id) || id < 1 || !Number.isInteger(id)) {
     throw new BadRequestError('Неверные параметры запроса', { details: 'Невалидный id задачи' });
   }
 

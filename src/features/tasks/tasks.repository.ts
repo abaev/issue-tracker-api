@@ -1,4 +1,4 @@
-import type { Task, CreateTaskInput, UpdateTaskInput, FindTaskInput } from '#src/features/tasks/tasks.js';
+import type { Task, CreateTaskInput, UpdateTaskInput, FindTaskInput } from './tasks.js';
 
 const tasks: Task[] = [
   {
