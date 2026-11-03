@@ -35,6 +35,10 @@ tasksRouter.get('/{:id}', (req, res) => {
         throw new BadRequestError('Неверные параметры запроса', { details: fieldErrors(parsed.error) });
       }
 
+      if(typeof parsed.data.search === 'string') {
+        parsed.data.search = decodeURIComponent(parsed.data.search);
+      }
+
       tasks = findTasks(parsed.data);
       
       // Получение всех задач

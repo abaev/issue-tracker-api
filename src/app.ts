@@ -1,4 +1,5 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
+import cors from 'cors';
 import { healthRouter } from './features/health/health.routes.js';
 import { tasksRouter } from './features/tasks/tasks.router.js';
 import { errorHandler } from './libraries/errors/error-handler.js';
@@ -6,6 +7,8 @@ import { BadRequestError } from './libraries/errors/errors.js';
 import { hasOwn } from './libraries/utils/object.js';
 
 export const app = express();
+
+app.use(cors());
 
 app.use(
   express.json(),
