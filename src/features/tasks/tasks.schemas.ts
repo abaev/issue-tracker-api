@@ -25,7 +25,7 @@ export const updateTaskInputSchema = z.toZod<UpdateTaskInput>()(z.object({
 }));
 
 export const findTaskInput = z.toZod<FindTaskInput>()(z.object({
-  id: z.int().positive().exactOptional(),
+  id: z.int('Должно быть целым числом').positive('Должно быть положительным числом').exactOptional(),
   status: taskStatusSchema.exactOptional(),
   search: z.string('Должно быть строкой').exactOptional()
 }));
