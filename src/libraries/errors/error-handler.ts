@@ -10,7 +10,10 @@ export function errorHandler(err: unknown, req: Request, res: Response, next: Ne
   }
 
   if(err instanceof ApiError) {
-    const response: ApiErrorResponse = { message: err.message };
+    const response: ApiErrorResponse = {
+      message: err.message,
+      name: err.name
+    };
 
     if(hasOwn<string>(err, 'details')) response.details = err.details;
 
@@ -27,4 +30,5 @@ export function errorHandler(err: unknown, req: Request, res: Response, next: Ne
 interface ApiErrorResponse {
   message: string;
   details?: unknown;
+  name: string
 }
